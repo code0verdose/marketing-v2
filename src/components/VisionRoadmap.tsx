@@ -19,7 +19,7 @@ type Phase = {
 
 const phases: Phase[] = [
   {
-    quarter: "Q1 2025",
+    quarter: "Q1 2026",
     title: "Foundation",
     status: "done",
     items: [
@@ -29,7 +29,7 @@ const phases: Phase[] = [
     ],
   },
   {
-    quarter: "Q2 2025",
+    quarter: "Q2 2026",
     title: "Content Suite",
     status: "current",
     items: [
@@ -39,7 +39,7 @@ const phases: Phase[] = [
     ],
   },
   {
-    quarter: "Q3 2025",
+    quarter: "Q3 2026",
     title: "Visual AI",
     status: "upcoming",
     items: [
@@ -49,7 +49,7 @@ const phases: Phase[] = [
     ],
   },
   {
-    quarter: "Q4 2025",
+    quarter: "Q4 2026",
     title: "Full Ecosystem",
     status: "upcoming",
     items: [
