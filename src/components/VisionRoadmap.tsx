@@ -113,10 +113,10 @@ export default function VisionRoadmap() {
 
         {/* Timeline */}
         <div className="relative">
-          {/* Vertical line */}
+          {/* Vertical line — centered on the 40px dot container (left-0, w-40px → center at 20px minus half the 1px line) */}
           <div
             aria-hidden
-            className="absolute left-[19px] md:left-[23px] top-0 bottom-0 w-px"
+            className="absolute left-[19.5px] top-[24px] bottom-0 w-px"
             style={{
               background:
                 "linear-gradient(to bottom, var(--accent), rgba(255,255,255,0.08) 70%)",
