@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  /* Disable scroll anchoring so that layout shifts from decoding/loading
+     <video> elements don't yank the page scroll position. */
+  overflow-anchor: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+* {
+  overflow-anchor: none;
+}
+#root {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: #fff;
+}
+
+button:not(:disabled),
+[role="button"]:not(:disabled),
+a,
+summary,
+label[for] {
+  cursor: pointer;
+}
+
+button:disabled,
+[role="button"][aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+/* Kill the yellow/white autofill background Safari/Chrome paints on
+   autofilled inputs — keep backgrounds transparent and text white. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #ffffff;
+  -webkit-box-shadow: 0 0 0 1000px transparent inset;
+  box-shadow: 0 0 0 1000px transparent inset;
+  transition: background-color 9999s ease-in-out 0s;
+  caret-color: #ffffff;
+}
+
+:root {
+  --page-gutter: 1rem;
+  --container-edge: 1rem;
+  --accent: #f5a27c;
+  --accent-soft: rgba(245, 162, 124, 0.12);
+  --accent-glow: rgba(245, 162, 124, 0.3);
+}
+@media (min-width: 640px) {
+  :root {
+    --page-gutter: 1.5rem;
+    --container-edge: 1.5rem;
+  }
+}
+@media (min-width: 768px) {
+  :root {
+    --container-edge: max(1.5rem, calc((100vw - 72rem) / 2));
+  }
+}
+
+@layer components {
+  .liquid-glass {
+    background: rgba(255, 255, 255, 0.01);
+    background-blend-mode: luminosity;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: none;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* High-quality downscaling for decorative images whose source is much
+     larger than their rendered size. Chrome respects "high-quality",
+     Safari respects "-webkit-optimize-contrast", Firefox has "auto". */
+  .hires-img {
+    image-rendering: auto;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: high-quality;
+    /* Force sRGB color interp + promote to its own layer so GPU scaler
+       picks the smoother filter kernel. */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .liquid-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.15) 20%,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0.15) 80%,
+      rgba(255, 255, 255, 0.45) 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
