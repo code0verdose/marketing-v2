@@ -27,7 +27,7 @@ export const HERO_VIDEO =
 // different clips even though the source URL is identical.
 export const sharedVideoTime = { current: 0 };
 
-export function VideoBg({ src = HERO_VIDEO }: { src?: string }) {
+export function VideoBg({ src = HERO_VIDEO, darker = false }: { src?: string; darker?: boolean }) {
   const ref = useRef<HTMLVideoElement>(null);
   const isHero = src === HERO_VIDEO;
   useEffect(() => {
@@ -75,8 +75,8 @@ export function VideoBg({ src = HERO_VIDEO }: { src?: string }) {
         preload="metadata"
         className="absolute inset-0 w-full h-full object-cover"
       />
-      <div className="absolute inset-0 bg-black/30" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/70" />
+      <div className={darker ? "absolute inset-0 bg-black/65" : "absolute inset-0 bg-black/30"} />
+      <div className={darker ? "absolute inset-0 bg-gradient-to-b from-black/75 via-black/55 to-black" : "absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/70"} />
     </div>
   );
 }
@@ -109,8 +109,8 @@ function DarkBg() {
 }
 
 type Variant = "video" | "dark";
-type SlideDef = { node: ReactNode; variant: Variant; noRise?: boolean; videoSrc?: string };
-type GroupDef = { variant: Variant; nodes: ReactNode[]; noRise?: boolean; videoSrc?: string };
+type SlideDef = { node: ReactNode; variant: Variant; noRise?: boolean; videoSrc?: string; darker?: boolean };
+type GroupDef = { variant: Variant; nodes: ReactNode[]; noRise?: boolean; videoSrc?: string; darker?: boolean };
 
 /**
  * A Group wraps consecutive same-variant sections with a single shared
@@ -161,13 +161,13 @@ function Group({
           style={{ y: bgY }}
           className="hidden md:block md:sticky md:top-0 md:h-screen md:w-full md:overflow-hidden pointer-events-none"
         >
-          <VideoBg src={group.videoSrc} />
+          <VideoBg src={group.videoSrc} darker={group.darker} />
         </motion.div>
         <div
           aria-hidden
           className="md:hidden absolute inset-0 w-full h-full pointer-events-none"
         >
-          <VideoBg src={group.videoSrc} />
+          <VideoBg src={group.videoSrc} darker={group.darker} />
         </div>
         <div className="relative md:-mt-[100vh]">
           {group.nodes.map((node, i) => (
@@ -208,9 +208,9 @@ function App() {
     { node: <LogoStrip />, variant: "video" },
     { node: <ProblemSection />, variant: "dark" },
     { node: <HowItWorks />, variant: "dark" },
-    { node: <FeatureBento />, variant: "video" },
-    { node: <HookExamples />, variant: "video" },
-    { node: <CaseStudies />, variant: "video" },
+    { node: <FeatureBento />, variant: "video", videoSrc: "/second.webm", darker: true },
+    { node: <HookExamples />, variant: "video", videoSrc: "/second.webm", darker: true },
+    { node: <CaseStudies />, variant: "video", videoSrc: "/second.webm", darker: true },
     { node: <SocialProof />, variant: "dark" },
     { node: <Pricing />, variant: "dark" },
     { node: <FAQ />, variant: "dark" },
@@ -227,7 +227,7 @@ function App() {
       last.nodes.push(s.node);
       if (s.noRise) last.noRise = true;
     } else {
-      groups.push({ variant: s.variant, nodes: [s.node], noRise: s.noRise, videoSrc: s.videoSrc });
+      groups.push({ variant: s.variant, nodes: [s.node], noRise: s.noRise, videoSrc: s.videoSrc, darker: s.darker });
     }
   }
 
