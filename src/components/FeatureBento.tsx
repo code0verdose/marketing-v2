@@ -5,7 +5,7 @@ import {
   useTransform,
   useMotionTemplate,
 } from "framer-motion";
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 import {
   Wand2,
   Layers,
@@ -62,6 +62,19 @@ export default function FeatureBento() {
   const sectionRef = useRef<HTMLElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const templateCardRef = useRef<HTMLDivElement>(null);
+
+  const isDesktopRef = useRef(false);
+  const [, forceRender] = useState(0);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => {
+      isDesktopRef.current = mq.matches;
+      forceRender((n) => n + 1);
+    };
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   // ── Measure "Template library" card position → starting cutout insets ──
   // Defaults tuned for a ~1280×800 viewport (card final position after
@@ -137,9 +150,17 @@ export default function FeatureBento() {
   const radiusPx = useTransform(scrollYProgress, [0.1, 0.7], [24, 0]);
   const radiusStr = useMotionTemplate`${radiusPx}px`;
 
-  // Content fades out as the cutout takes over the viewport
-  const contentOpacity = useTransform(scrollYProgress, [0.45, 0.7], [1, 0]);
-  const contentScale = useTransform(scrollYProgress, [0.45, 0.8], [1, 0.94]);
+  // Content fades out as the cutout takes over the viewport (desktop only)
+  const contentOpacity = useTransform(scrollYProgress, (v) => {
+    if (!isDesktopRef.current) return 1;
+    const p = Math.min(1, Math.max(0, (v - 0.45) / 0.25));
+    return 1 - p;
+  });
+  const contentScale = useTransform(scrollYProgress, (v) => {
+    if (!isDesktopRef.current) return 1;
+    const p = Math.min(1, Math.max(0, (v - 0.45) / 0.35));
+    return 1 - p * 0.06;
+  });
 
   return (
     <section
